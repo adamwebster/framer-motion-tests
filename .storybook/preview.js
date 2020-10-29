@@ -1,6 +1,6 @@
 import React from "react"
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
-
+import { AppContextProvider } from '../src/AppState'
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -15,8 +15,10 @@ const GlobalStyle = createGlobalStyle`
 export const decorators = [
   (Story) => (
     <ThemeProvider theme={{}}>
+      <AppContextProvider>
       <GlobalStyle />
       <Story />
+      </AppContextProvider>
     </ThemeProvider>
   ),
 ];
