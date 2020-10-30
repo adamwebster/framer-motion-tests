@@ -10,6 +10,7 @@ const StyledCubesWrapper = styled.div`
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-gap: 1rem;
+    position: relative;
 `;
 
 interface SCProps {
@@ -29,7 +30,7 @@ const StyledCube = styled(motion.div)<SCProps>`
 `;
 
 const offsetValue = 79;
-const scaleSize = 1.5;
+const scaleSize = 1;
 const variants = {
     open: {
         scale: scaleSize,
@@ -38,7 +39,13 @@ const variants = {
         zIndex: 1,
         boxShadow: '0px 0px 10px #888888',
     },
-    closed: { scale: 1, x: 0, y: 0, zIndex: 0, boxShadow: 'none' },
+    closed: {
+        scale: 1,
+        x: 0,
+        y: 0,
+        zIndex: 0,
+        boxShadow: 'none',
+    },
 };
 
 const variants2 = {
@@ -60,13 +67,12 @@ const Cubes = () => {
     const { appState } = useContext(AppContext);
     return (
         <StyledCubesWrapper>
-        <AnimatePresence>
-            <Cube variants={variants} />
-            <Cube variants={variants2} />
-            <Cube variants={variants3} />
-            <Cube variants={variants4} />
+            <AnimatePresence>
+                <Cube variants={variants} />
+                <Cube variants={variants2} />
+                <Cube variants={variants3} />
+                <Cube variants={variants4} />
             </AnimatePresence>
-
         </StyledCubesWrapper>
     );
 };
@@ -78,6 +84,11 @@ const Cube = ({ ...rest }) => {
         dispatchApp({ type: 'SET_CUBES_OPEN', payload: !isOpen });
         setIsOpen(!isOpen);
     };
+
+    const variationCube = {
+        open: { opacity: 1 },
+        closed: { opacity: 0 },
+    };
     return (
         <StyledCube
             onClick={() => toggleOpen()}
@@ -85,7 +96,14 @@ const Cube = ({ ...rest }) => {
             isOpen={!isOpen && appState.cubesOpen}
             {...rest}
         >
-            {isOpen && <>Hello</>}
+            <motion.div
+                variants={variationCube}
+                initial={{ opacity: 0 }}
+                animate={isOpen ? 'open' : 'closed'}
+                transition={{ delay: 0 }}
+            >
+                Hello
+            </motion.div>
         </StyledCube>
     );
 };
